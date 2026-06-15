@@ -1,238 +1,331 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KINGS SPORTS</title>
-
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Navigation</title>
+    <title>Tiger Basketball Club | Kings Sports</title>
     <style>
-        /* Basic reset for the page */
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Impact&display=swap');
+        
+        :root {
+            --primary-blue: #003087;
+            --accent-blue: #00aaff;
+            --dark-bg: #0a1428;
+        }
+        
+        * {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9; /* Light, clean background for the whole page */
+            padding: 0;
+            box-sizing: border-box;
         }
-
-        /* The Navigation Container */
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #001f3f 50%, var(--primary-blue) 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: rgba(10, 20, 40, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--accent-blue);
+        }
+        
         nav {
-            background-color: #1a252f; /* Dark slate blue background for the nav */
-            padding: 15px 0;
             display: flex;
-            justify-content: center; /* This perfectly centers the content horizontally */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle, modern shadow */
+            justify-content: center;
+            padding: 1rem;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
-
-        /* Styling the Links */
+        
         nav a {
-            color: #ffffff; /* Crisp white text */
-            text-decoration: none; /* Removes the default underline */
-            padding: 10px 20px;
-            margin: 0 5px;
-            font-weight: 500;
-            transition: all 0.3s ease; /* Smooth transition for the hover effect */
-            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
         }
-
-        /* Hover Effect */
+        
         nav a:hover {
-            background-color: #34495e; /* Lighter slate blue when hovered */
-            color: #3498db; /* A pop of bright blue text on hover */
+            color: var(--accent-blue);
+            transform: translateY(-3px);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        h1 {
+            font-family: 'Impact', sans-serif;
+            font-size: 3.5rem;
+            color: var(--accent-blue);
+            text-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            color: #a0d8ff;
+        }
+        
+        section {
+            padding: 3rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2, h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(0, 170, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        /* Full-page styled Roster Table */
+        .roster-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(10, 30, 60, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        th {
+            background: var(--accent-blue);
+            color: #000;
+            padding: 1.2rem;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+        
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        tr:hover {
+            background: rgba(0, 170, 255, 0.2);
+            transition: background 0.3s;
+        }
+        
+        /* Media Grid */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .media-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .media-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .media-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .footer {
+            background: rgba(10, 20, 40, 0.95);
+            text-align: center;
+            padding: 2rem;
+            border-top: 3px solid var(--accent-blue);
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                gap: 1rem;
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 2.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="#kings">Kings</a>
+            <a href="#about">About Us</a>
+            <a href="#tiger">Tiger Basketball Club</a>
+            <a href="#media">Media</a>
+            <a href="#roster">Roster</a>
+            <a href="#youth">Youth Activities</a>
+            <a href="#contacts">Contacts</a>
+        </nav>
+    </header>
 
-   <h1>TIGER BASKETBALL CLUB</h1>
-    <p>All Court, All Heart</p>
-
-   <hr>
-  <!--Navigation hyperlinks-->
-    <a href="#kings">Kings</a> |
-    <a href="#about us">About Us</a> |
-    <a href="#tiger basketball club">Tiger Basketball Club</a> |
-    <a href="#media">Media</a> |
-    <a href="#youth activities">Youth Activities</a> |
-    <a href="contacts">Contacts</a> |
-
-  <hr>
-
-  <h3 id="Kings">Kings</h3>
-    <p>Electrifying the court, the KINGS is a force to be reckoned 
-        with in the South Sudan Basketball Federation Premier League. 
-        Our vision? To become the best developers in basketball teams in Africa. </p>
-
-  <hr>
-    <h3 id="about us">About Us</h3>
-     <p> At Kings Sports, we are building the leading basketball brand in Africa. 
-        We envision a future where basketball transcends boundaries 
-        and African talent shines on the global stage. </p>
-     <p> Our journey is fueled by an intense passion for the game, 
-        and our commitment extends beyond the court. 
-        We are actively amplifying the individual, social, and economic impact 
-        of youth sports. </p>
-     <p> We recognize and leverage trends, gaps, 
-        and opportunities within the basketball community, 
-        and use our convening power to promote African basketball 
-        by developing professional teams, promoting youth basketball, 
-        and establishing sports facilities.</p>
-
-   <hr>
-    <h3 id="tiger basketball club">Tiger Basketball Club</h3>
-   <p> The Firdt South Sudan team to qualify for the Basketball Africa League (BAL).</p> 
-    <p> Two-time unbeaten champions in the South Sudan Basketball Federation Premier League.</p> 
-    <p> All in for the fans. #WeAreTigers</p>
-
-
-  <p> We made history in 2024 - and again in 2025 - 
-        by being the first South Sudan team to qualify for 
-        the Basketball Africa League (BAL). 
-        We also remained undefeated in two straight seasons in the South Sudaness 
-        Basketball League (2023-2024 & 2024-2025).</p>
-
-   <p> We are more than a winning basketball brand - 
-        we are on a mission to transform the landscape of the sport 
-        on the continent. We're dedicated to the growth of basketball 
-        in South Sudan, East Africa and beyond.</p>
-    <p> Fueled by our intense passion for the game, 
-        our commitment extends beyond the court. 
-        We are actively amplifying the individual, 
-        social, and economic impact of youth sports. </p>
-
-  <h3 id="Media">Media</h3>
-  <img src="https://pin.it/5FlTp9TMt" alt="Tiger Logo" width="300" height="auto">
-  <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800" alt="Basketball court">
-  <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800" alt="Basketball player dunking">
-  <img src="https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=800" alt="Basketball player shooting">
-  <img scr="C:\Users\26-0695\Downloads\hd wallpaper iphone android mobile home.jpg"> 
- 
-  <div class="video-container">
-        <iframe 
-            class="responsive-iframe"
-            src="https://www.youtube.com/embed/SQR_C6RwAQY?start=3" 
-            title="Teaching some basketball skills." 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
-        </iframe>
+    <div class="hero">
+        <h1>TIGER BASKETBALL CLUB</h1>
+        <p class="tagline">All Court, All Heart • #WeAreTigers</p>
     </div>
 
-<table border="1" cellpadding ="0" style="border-collapse: width: 100%; text-align: left;">
-    <thead>
-        <tr>
-            <th>Player's Name</th>
-            <th>Position</th>
-            <th>Shirt Number</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Stephen Mokaya</td>
-            <td>Point Guard</td>
-            <td>00</td>
-        </tr>
-        <tr>
-            <td>Ongwae Kaleb</td>
-            <td>Guard</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <td>Deng Garang</td>
-            <td>Point Guard</td>
-            <td>3</td>
-        </tr>
-        <tr>
-            <td>Albert Alier</td>
-            <td>Center</td>
-            <td>2</td>
-        </tr>
-        <tr>
-            <td>Eugen Kipsang</td>
-            <td>Point Guard</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td>Willy Othiambo</td>
-            <td>power foward</td>
-            <td>12</td>
-        </tr>
-        <tr>
-            <td>Bien Kuot</td>
-            <td>Shooting Guard</td>
-            <td>30</td>
-        </tr>
-        <tr>
-            <td>Derrick manyang</td>
-            <td>Small Forward</td>
-            <td>34</td>
-        </tr>
-        <tr>
-            <td>Deng Brian</td>
-            <td>Center</td>
-            <td>40</td>
-        </tr>
-        <tr>
-            <td>Tango Two</td>
-            <td>Point Guard</td>
-            <td>11</td>
-        </tr>
-        <tr>
-            <td>Dismas Ring</td>
-            <td>Power Forward</td>
-            <td>30</td>
-        </tr>
+    <section id="kings">
+        <h2>Kings Sports</h2>
+        <p>Electrifying the court, the KINGS is a force to be reckoned with in the South Sudan Basketball Federation Premier League. Our vision? To become the best developers of basketball teams in Africa.</p>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>At Kings Sports, we are building the leading basketball brand in Africa. We envision a future where basketball transcends boundaries and African talent shines on the global stage.</p>
+        <p>Our journey is fueled by intense passion for the game, and our commitment extends beyond the court. We are actively amplifying the individual, social, and economic impact of youth sports.</p>
+        <p>We recognize trends, gaps, and opportunities within the basketball community, using our convening power to promote African basketball by developing professional teams, promoting youth basketball, and establishing sports facilities.</p>
+    </section>
+
+    <section id="tiger">
+        <h2>Tiger Basketball Club</h2>
+        <p>The first South Sudan team to qualify for the Basketball Africa League (BAL).</p>
+        <p>Two-time unbeaten champions in the South Sudan Basketball Federation Premier League.</p>
+        <p>All in for the fans. #WeAreTigers</p>
+        <p>We made history in 2024 and 2025 by being the first South Sudan team to qualify for the BAL. We remained undefeated in two straight seasons (2023-2024 & 2024-2025).</p>
+        <p>We are more than a winning basketball brand — we are transforming the landscape of the sport on the continent.</p>
+    </section>
+
+    <!-- Full Page Styled Roster -->
+    <section id="roster" class="roster-section">
+        <h2 style="text-align:center; color:white;">TIGER ROSTER 2025-2026</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player's Name</th>
+                    <th>Position</th>
+                    <th>Shirt Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Stephen Mokaya</td><td>Point Guard</td><td>00</td></tr>
+                <tr><td>Ongwae Kaleb</td><td>Guard</td><td>1</td></tr>
+                <tr><td>Deng Garang</td><td>Point Guard</td><td>3</td></tr>
+                <tr><td>Albert Alier</td><td>Center</td><td>2</td></tr>
+                <tr><td>Eugen Kipsang</td><td>Point Guard</td><td>5</td></tr>
+                <tr><td>Willy Othiambo</td><td>Power Forward</td><td>12</td></tr>
+                <tr><td>Bien Kuot</td><td>Shooting Guard</td><td>30</td></tr>
+                <tr><td>Derrick Manyang</td><td>Small Forward</td><td>34</td></tr>
+                <tr><td>Deng Brian</td><td>Center</td><td>40</td></tr>
+                <tr><td>Tango Two</td><td>Point Guard</td><td>11</td></tr>
+                <tr><td>Dismas Ring</td><td>Power Forward</td><td>30</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Media Grid: 2x2 minimum + video -->
+    <section id="media">
+        <h2>Media Gallery</h2>
+        <div class="media-grid">
+            <!-- Row 1 -->
+            <div class="media-item">
+                <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800" alt="Basketball Court">
+            </div>
+            <div class="media-item">
+                <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800" alt="Player Dunking">
+            </div>
+            <!-- Row 2 -->
+            <div class="media-item">
+                <img src="https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=800" alt="Player Shooting">
+            </div>
+            <div class="media-item">
+                <img src="https://picsum.photos/id/1015/800/600" alt="Tiger Team Action">
+            </div>
+            
+            <!-- Video spans full width on smaller screens but stays in grid -->
+            <div class="media-item" style="grid-column: 1 / -1;">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/SQR_C6RwAQY?start=3" 
+                            title="Basketball Skills" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="youth">
+        <h2>Nurturing Talent & Fostering Love for the Game</h2>
         
- </tbody>
-</table>
+        <h3>Kings Initiatives</h3>
+        <p>Kings Sports believes giving back to the community is a slam dunk. We bring professional-level coaching and resources directly to young athletes. Through youth development programs, we're committed to nurturing the next generation of South Sudan basketball stars.</p>
+        
+        <h3>Kings Men Street League Team</h3>
+        <p>We build champions from the asphalt up. Our street league teams cultivate raw talent, transforming streetballers into stars. In our first year we took home the Street League Championship!</p>
+        
+        <h3>Kings Women Street League Team</h3>
+        <p>We are committed to providing equal opportunities for young women. Our women's team qualified for playoffs in 2023 and is aiming for the top in 2027.</p>
+        
+        <h3>Court Rehabilitation</h3>
+        <p>We build and rehabilitate community courts, providing spaces for aspiring talents. Our transformative basketball camps nurture the next generation.</p>
+        
+        <h3>Community Clinics</h3>
+        <p>Our clinics bring basketball to underprivileged children in Nairobi, coaching and mentoring young minds for success on and off the court.</p>
+        
+        <h3>Dee Mentor Partnership</h3>
+        <p>Partnered with Dee Mentor to support young Ethiopian refugees in South Sudan through sports and education scholarships.</p>
+    </section>
 
-<h3 id="youth activities">Nuturing Talent And Fostering A Love for the Game</h3>
-<h3>Kings Initiatives</h3>
-<p>
-    Kings Sports, giving back to the community is a slam dunk.
-    We bring professional-level coaching and resources right to their doorstept. Throught Youth developing
-    programs, we're committed to nuturing the next generation of South Sudan basketball stars and fans.
-    This includes rehabilitating community courts, providng mentorship, and offering top-notch coaching 
-    to help young atheletes reach their full potential.
-</p>
-
-<h3>Kings Men Street League Team</h3>
-<p>
-    We build champions from the asphalt up. Our street Leauge teams cultivate raw talent honed on concreta
-    courts, transforming streetballers into the next generation of stars. In our first year competing we proved it all on the court, taking home the Street leauge Championship!.
-</p>
-
-<h3>Kings Women Street Leauge team</h3>
-<p>We are commited to providing equall opportunities for young women to pursue their basketball ambitions.
-    We established our women's street leauge team in 2023- the ladies qualified  for playoffs and are gearing to top the league in 2027.
-</p>
-
-<h3>Court Rehabilation</h3>
-<p>
-    We are actively building basketball courts in communities, providing a space for asfiring talents to home their skills. Our tansformative basketball camps are nuturing the next generation of basketball enhusiasts, ensuring a sustainable and thriving future for the sport.
-</p>
-
-<h3>Community Clinics</h3>
-<p>
-    Growing stars on the court and in life. Our clinics brings basketball to underprivileged children in primary schools across Nairobi. We coach and mentor young minds, nuturing their love for the game while building a foundation for success on and off the court.
-</p>
-
-<h3>Dee Mentor</h3>
-<p>
-    We've teamed up with Deementor to help young Ethiopian refugees in South Sudan find their place through the power of sports. They face challenges integrating into their new communities. Deementor provides crucial scholarship opportunities, allowing them to pursue their education alongside their athletic dreams.
-</p>
-
-<h3 id="contacts">Contacts<h3/>
-    <p style="text-align:center; margin-top:20px;">
-        Kings Sports | Tiger Basketball Club
-        info@kingssports.co.ke | +211 940 419 023
-        Tiger Basketball Club — Basketball For The Future. 
-        |Copyright 2026|
-    </p>
-
-
-
-
-
+    <footer class="footer" id="contacts">
+        <p><strong>Kings Sports | Tiger Basketball Club</strong></p>
+        <p>info@kingssports.co.ke | +211 940 419 023</p>
+        <p>Tiger Basketball Club — Basketball For The Future</p>
+        <p>&copy; 2026 All Rights Reserved</p>
+    </footer>
 </body>
+</html>
