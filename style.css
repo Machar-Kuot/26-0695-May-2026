@@ -99,6 +99,16 @@ h2 {
   text-decoration: none;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-logo {
+  height: 42px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 4px rgba(232,136,26,0.5));
 }
 .brand span {
   color: var(--amber);
@@ -151,10 +161,22 @@ h2 {
   padding: 6rem 1.5rem 5rem;
 }
 
+.hero-video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .hero-court-lines {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
   background:
     repeating-linear-gradient(
       115deg,
@@ -167,6 +189,7 @@ h2 {
 
 .hero-inner {
   position: relative;
+  z-index: 2;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
