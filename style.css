@@ -422,6 +422,22 @@ h2 {
   font-size: 1.1rem;
 }
 
+.people-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0.8rem;
+}
+
+.staff-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #E8881A;
+}
+
 /* ==========================================================================
    MEDIA
    ========================================================================== */
