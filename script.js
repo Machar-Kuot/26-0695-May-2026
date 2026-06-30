@@ -1,3 +1,29 @@
+// --- Supabase setup ---
+const SUPABASE_URL = 'https://mpmxknkospiifcrvmagu.supabase.co';      // your Project URL
+const SUPABASE_ANON_KEY = 'sb_publishable_OVyAp22IaH3WbYr_6aJO8Q_xN4vnO5-';          // your anon public key
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+supabaseClient
+  .from('registrations')
+  .insert([{
+    full_name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    phone: phoneInput.value.trim(),
+    gender: selectedGender
+  }])
+  .then(function(result) {
+    if (result.error) {
+      successMsg.textContent = 'Error: ' + result.error.message;
+      successMsg.classList.add('visible');
+    } else {
+      successMsg.textContent =
+        'Thanks, ' + nameInput.value.trim() + '! Your registration has been received.';
+      successMsg.classList.add('visible');
+      form.reset();
+      [nameError, emailError, phoneError, genderError].forEach(clearError);
+    }
+  });
+
 /* ==========================================================================
    KINGS SPORTS | TIGER BASKETBALL CLUB — script.js
    1. Weekend fixtures popup
