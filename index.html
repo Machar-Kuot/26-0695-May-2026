@@ -27,6 +27,7 @@
       <a href="#audio">Audio</a>
       <a href="#register">Register</a>
       <a href="#youth">Youth Activities</a>
+      <a href="#support">Support Us</a>
       <a href="#contacts">Contacts</a>
     </nav>
   </div>
@@ -322,6 +323,71 @@
           <p>We build and rehabilitate courts while running clinics in schools across the region. We also partner with Deementor to support young Ethiopian refugees through sports and education.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT / DONATIONS -->
+  <section id="support" class="support">
+    <div class="section-inner">
+      <span class="section-number">09</span>
+      <h2>Support The Tigers</h2>
+      <p class="support-intro">Help us grow the game in South Sudan. Every donation goes directly toward player development, travel to BAL fixtures, and youth programs.</p>
+
+      <div class="mpesa-box">
+        <h3>Donate via M-Pesa</h3>
+        <div class="mpesa-details">
+          <div class="mpesa-row">
+            <span class="mpesa-label">Send Money To</span>
+            <span class="mpesa-value">0740 419 023</span>
+          </div>
+          <div class="mpesa-row">
+            <span class="mpesa-label">Registered Name</span>
+            <span class="mpesa-value">Machar Kuot</span>
+          </div>
+          <div class="mpesa-row">
+            <span class="mpesa-label">Currency</span>
+            <span class="mpesa-value">KES</span>
+          </div>
+        </div>
+        <ol class="mpesa-steps">
+          <li>Open your M-Pesa app or dial <strong>*334#</strong></li>
+          <li>Select <strong>Send Money</strong></li>
+          <li>Enter <strong>0740 419 023</strong></li>
+          <li>Enter your donation amount and confirm with your M-Pesa PIN</li>
+          <li>Fill in the short form below so we can thank you personally</li>
+        </ol>
+      </div>
+
+      <form id="donationForm" class="donation-form" novalidate>
+        <h3 class="donation-form-heading">Let Us Know You Gave 🏀</h3>
+
+        <div class="form-row">
+          <label for="donName">Full Name</label>
+          <input type="text" id="donName" name="donorName" placeholder="e.g. Bien Kuot" required minlength="2">
+          <span class="form-error" id="donNameError"></span>
+        </div>
+
+        <div class="form-row">
+          <label for="donPhone">Phone Number Used</label>
+          <input type="tel" id="donPhone" name="donorPhone" placeholder="e.g. 07XX XXX XXX" required
+                 pattern="^\+?[0-9\s-]{8,15}$">
+          <span class="form-error" id="donPhoneError"></span>
+        </div>
+
+        <div class="form-row">
+          <label for="donAmount">Amount (KES)</label>
+          <input type="number" id="donAmount" name="donorAmount" placeholder="e.g. 500" required min="1" step="1">
+          <span class="form-error" id="donAmountError"></span>
+        </div>
+
+        <div class="form-row">
+          <label for="donMessage">Message (Optional)</label>
+          <input type="text" id="donMessage" name="donorMessage" placeholder="A word of support for the Tigers">
+        </div>
+
+        <button type="submit" class="btn-submit">Confirm Donation</button>
+        <p class="form-success" id="donationSuccess" role="status"></p>
+      </form>
     </div>
   </section>
 
