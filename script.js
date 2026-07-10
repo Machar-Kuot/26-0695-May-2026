@@ -2,6 +2,7 @@
    KINGS SPORTS | TIGER BASKETBALL CLUB — script.js
    1. Weekend fixtures popup
    2. Registration form validation + Supabase submission
+   3. Donation form validation + Supabase submission
    ========================================================================== */
 
 /* ------------------------------------------------------------------
@@ -66,124 +67,235 @@ document.addEventListener('DOMContentLoaded', function () {
      2. REGISTRATION FORM VALIDATION + SUPABASE SUBMISSION
      ------------------------------------------------------------------ */
   var form = document.getElementById('registerForm');
-  if (!form) return;
 
-  var nameInput    = document.getElementById('regName');
-  var emailInput   = document.getElementById('regEmail');
-  var phoneInput   = document.getElementById('regPhone');
-  var genderInputs = form.querySelectorAll('input[name="gender"]');
-  var successMsg   = document.getElementById('formSuccess');
-  var submitBtn    = form.querySelector('.btn-submit');
+  if (form) {
+    var nameInput    = document.getElementById('regName');
+    var emailInput   = document.getElementById('regEmail');
+    var phoneInput   = document.getElementById('regPhone');
+    var genderInputs = form.querySelectorAll('input[name="gender"]');
+    var successMsg   = document.getElementById('formSuccess');
+    var submitBtn    = form.querySelector('.btn-submit');
 
-  var nameError   = document.getElementById('nameError');
-  var emailError  = document.getElementById('emailError');
-  var phoneError  = document.getElementById('phoneError');
-  var genderError = document.getElementById('genderError');
+    var nameError   = document.getElementById('nameError');
+    var emailError  = document.getElementById('emailError');
+    var phoneError  = document.getElementById('phoneError');
+    var genderError = document.getElementById('genderError');
 
-  var EMAIL_RULE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  var PHONE_RULE = /^\+?[0-9\s-]{8,15}$/;
+    var EMAIL_RULE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var PHONE_RULE = /^\+?[0-9\s-]{8,15}$/;
 
-  function setError(el, msg) { el.textContent = msg; }
-  function clearError(el)    { el.textContent = ''; }
+    var setError = function (el, msg) { el.textContent = msg; };
+    var clearError = function (el)    { el.textContent = ''; };
 
-  function validateName() {
-    var value = nameInput.value.trim();
-    if (value.length === 0) { setError(nameError, 'Please enter your full name.'); return false; }
-    if (value.length < 2)   { setError(nameError, 'Name must be at least 2 characters.'); return false; }
-    clearError(nameError);
-    return true;
-  }
+    var validateName = function () {
+      var value = nameInput.value.trim();
+      if (value.length === 0) { setError(nameError, 'Please enter your full name.'); return false; }
+      if (value.length < 2)   { setError(nameError, 'Name must be at least 2 characters.'); return false; }
+      clearError(nameError);
+      return true;
+    };
 
-  function validateEmail() {
-    var value = emailInput.value.trim();
-    if (value.length === 0)       { setError(emailError, 'Please enter your email address.'); return false; }
-    if (!EMAIL_RULE.test(value))  { setError(emailError, 'Enter a valid email, e.g. name@example.com.'); return false; }
-    clearError(emailError);
-    return true;
-  }
+    var validateEmail = function () {
+      var value = emailInput.value.trim();
+      if (value.length === 0)       { setError(emailError, 'Please enter your email address.'); return false; }
+      if (!EMAIL_RULE.test(value))  { setError(emailError, 'Enter a valid email, e.g. name@example.com.'); return false; }
+      clearError(emailError);
+      return true;
+    };
 
-  function validatePhone() {
-    var value = phoneInput.value.trim();
-    if (value.length === 0)       { setError(phoneError, 'Please enter your phone number.'); return false; }
-    if (!PHONE_RULE.test(value))  { setError(phoneError, 'Enter a valid phone number (8–15 digits, may start with +).'); return false; }
-    clearError(phoneError);
-    return true;
-  }
+    var validatePhone = function () {
+      var value = phoneInput.value.trim();
+      if (value.length === 0)       { setError(phoneError, 'Please enter your phone number.'); return false; }
+      if (!PHONE_RULE.test(value))  { setError(phoneError, 'Enter a valid phone number (8–15 digits, may start with +).'); return false; }
+      clearError(phoneError);
+      return true;
+    };
 
-  function validateGender() {
-    var checked = Array.prototype.some.call(genderInputs, function (input) { return input.checked; });
-    if (!checked) { setError(genderError, 'Please select a gender.'); return false; }
-    clearError(genderError);
-    return true;
-  }
+    var validateGender = function () {
+      var checked = Array.prototype.some.call(genderInputs, function (input) { return input.checked; });
+      if (!checked) { setError(genderError, 'Please select a gender.'); return false; }
+      clearError(genderError);
+      return true;
+    };
 
-  // Live validation on blur
-  nameInput.addEventListener('blur', validateName);
-  emailInput.addEventListener('blur', validateEmail);
-  phoneInput.addEventListener('blur', validatePhone);
-  genderInputs.forEach(function (input) {
-    input.addEventListener('change', validateGender);
-  });
+    // Live validation on blur
+    nameInput.addEventListener('blur', validateName);
+    emailInput.addEventListener('blur', validateEmail);
+    phoneInput.addEventListener('blur', validatePhone);
+    genderInputs.forEach(function (input) {
+      input.addEventListener('change', validateGender);
+    });
 
-  // Form submit
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+    // Form submit
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-    var isNameValid   = validateName();
-    var isEmailValid  = validateEmail();
-    var isPhoneValid  = validatePhone();
-    var isGenderValid = validateGender();
+      var isNameValid   = validateName();
+      var isEmailValid  = validateEmail();
+      var isPhoneValid  = validatePhone();
+      var isGenderValid = validateGender();
 
-    if (!isNameValid || !isEmailValid || !isPhoneValid || !isGenderValid) {
-      successMsg.classList.remove('visible');
-      successMsg.textContent = '';
-      return;
-    }
+      if (!isNameValid || !isEmailValid || !isPhoneValid || !isGenderValid) {
+        successMsg.classList.remove('visible');
+        successMsg.textContent = '';
+        return;
+      }
 
-    var selectedGender = Array.prototype.find.call(genderInputs, function (input) {
-      return input.checked;
-    }).value;
+      var selectedGender = Array.prototype.find.call(genderInputs, function (input) {
+        return input.checked;
+      }).value;
 
-    // Disable button while submitting
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
+      // Disable button while submitting
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
 
-    // Send to Supabase
-    supabaseClient
-      .from('registrations')
-      .insert([{
-        full_name: nameInput.value.trim(),
-        email:     emailInput.value.trim(),
-        phone:     phoneInput.value.trim(),
-        gender:    selectedGender
-      }])
-      .then(function (result) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Register';
+      // Send to Supabase
+      supabaseClient
+        .from('registrations')
+        .insert([{
+          full_name: nameInput.value.trim(),
+          email:     emailInput.value.trim(),
+          phone:     phoneInput.value.trim(),
+          gender:    selectedGender
+        }])
+        .then(function (result) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register';
 
-        if (result.error) {
-          // Show error to user
+          if (result.error) {
+            // Show error to user
+            successMsg.style.color = '#C23B2E';
+            successMsg.textContent = 'Something went wrong: ' + result.error.message;
+            successMsg.classList.add('visible');
+          } else {
+            // Success
+            successMsg.style.color = '';
+            successMsg.textContent =
+              'Thanks, ' + nameInput.value.trim() + '! Your registration has been received. We\'ll be in touch soon.';
+            successMsg.classList.add('visible');
+
+            form.reset();
+            [nameError, emailError, phoneError, genderError].forEach(clearError);
+          }
+        })
+        .catch(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register';
           successMsg.style.color = '#C23B2E';
-          successMsg.textContent = 'Something went wrong: ' + result.error.message;
+          successMsg.textContent = 'Network error. Please check your connection and try again.';
           successMsg.classList.add('visible');
-        } else {
-          // Success
-          successMsg.style.color = '';
-          successMsg.textContent =
-            'Thanks, ' + nameInput.value.trim() + '! Your registration has been received. We\'ll be in touch soon.';
-          successMsg.classList.add('visible');
+        });
+    });
+  }
 
-          form.reset();
-          [nameError, emailError, phoneError, genderError].forEach(clearError);
-        }
-      })
-      .catch(function (err) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Register';
-        successMsg.style.color = '#C23B2E';
-        successMsg.textContent = 'Network error. Please check your connection and try again.';
-        successMsg.classList.add('visible');
-      });
-  });
+
+  /* ------------------------------------------------------------------
+     3. DONATION FORM VALIDATION + SUPABASE SUBMISSION
+     ------------------------------------------------------------------ */
+  var donationForm = document.getElementById('donationForm');
+
+  if (donationForm) {
+    var donNameInput    = document.getElementById('donName');
+    var donPhoneInput   = document.getElementById('donPhone');
+    var donAmountInput  = document.getElementById('donAmount');
+    var donMessageInput = document.getElementById('donMessage');
+    var donationSuccess = document.getElementById('donationSuccess');
+    var donationSubmit  = donationForm.querySelector('.btn-submit');
+
+    var donNameError   = document.getElementById('donNameError');
+    var donPhoneError  = document.getElementById('donPhoneError');
+    var donAmountError = document.getElementById('donAmountError');
+
+    var DON_PHONE_RULE = /^\+?[0-9\s-]{8,15}$/;
+
+    var donSetError   = function (el, msg) { el.textContent = msg; };
+    var donClearError = function (el)      { el.textContent = ''; };
+
+    var validateDonName = function () {
+      var value = donNameInput.value.trim();
+      if (value.length === 0) { donSetError(donNameError, 'Please enter your full name.'); return false; }
+      if (value.length < 2)   { donSetError(donNameError, 'Name must be at least 2 characters.'); return false; }
+      donClearError(donNameError);
+      return true;
+    };
+
+    var validateDonPhone = function () {
+      var value = donPhoneInput.value.trim();
+      if (value.length === 0)          { donSetError(donPhoneError, 'Please enter the phone number you used.'); return false; }
+      if (!DON_PHONE_RULE.test(value)) { donSetError(donPhoneError, 'Enter a valid phone number (8–15 digits, may start with +).'); return false; }
+      donClearError(donPhoneError);
+      return true;
+    };
+
+    var validateDonAmount = function () {
+      var value = donAmountInput.value.trim();
+      var numValue = Number(value);
+      if (value.length === 0)          { donSetError(donAmountError, 'Please enter the amount you sent.'); return false; }
+      if (isNaN(numValue) || numValue <= 0) { donSetError(donAmountError, 'Enter a valid amount greater than 0.'); return false; }
+      donClearError(donAmountError);
+      return true;
+    };
+
+    // Live validation on blur
+    donNameInput.addEventListener('blur', validateDonName);
+    donPhoneInput.addEventListener('blur', validateDonPhone);
+    donAmountInput.addEventListener('blur', validateDonAmount);
+
+    // Form submit
+    donationForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var isDonNameValid   = validateDonName();
+      var isDonPhoneValid  = validateDonPhone();
+      var isDonAmountValid = validateDonAmount();
+
+      if (!isDonNameValid || !isDonPhoneValid || !isDonAmountValid) {
+        donationSuccess.classList.remove('visible');
+        donationSuccess.textContent = '';
+        return;
+      }
+
+      // Disable button while submitting
+      donationSubmit.disabled = true;
+      donationSubmit.textContent = 'Sending…';
+
+      // Send to Supabase
+      supabaseClient
+        .from('donations')
+        .insert([{
+          donor_name: donNameInput.value.trim(),
+          phone:      donPhoneInput.value.trim(),
+          amount:     Number(donAmountInput.value.trim()),
+          message:    donMessageInput.value.trim() || null
+        }])
+        .then(function (result) {
+          donationSubmit.disabled = false;
+          donationSubmit.textContent = 'Confirm Donation';
+
+          if (result.error) {
+            // Show error to user
+            donationSuccess.style.color = '#C23B2E';
+            donationSuccess.textContent = 'Something went wrong: ' + result.error.message;
+            donationSuccess.classList.add('visible');
+          } else {
+            // Success
+            donationSuccess.style.color = '';
+            donationSuccess.textContent =
+              'Asante, ' + donNameInput.value.trim() + '! Thank you for supporting the Tigers 🏀';
+            donationSuccess.classList.add('visible');
+
+            donationForm.reset();
+            [donNameError, donPhoneError, donAmountError].forEach(donClearError);
+          }
+        })
+        .catch(function (err) {
+          donationSubmit.disabled = false;
+          donationSubmit.textContent = 'Confirm Donation';
+          donationSuccess.style.color = '#C23B2E';
+          donationSuccess.textContent = 'Network error. Please check your connection and try again.';
+          donationSuccess.classList.add('visible');
+        });
+    });
+  }
 
 });
