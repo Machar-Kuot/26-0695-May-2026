@@ -163,6 +163,34 @@
     </div>
   </div>
 </section>
+
+  <!-- Player Profile Submission -->
+<section id="player-profile-form" class="player-section">
+  <h2>Join the Team Roster</h2>
+  <p>Players who join Tiger Basketball Club can create their own profile below.</p>
+  <form id="playerForm" class="player-form">
+    <input type="text" id="playerName" placeholder="Full Name" required>
+    <input type="text" id="playerPosition" placeholder="Position (e.g. Point Guard)">
+    <input type="number" id="playerNumber" placeholder="Jersey Number">
+    <textarea id="playerBio" placeholder="Short bio (optional)" rows="3"></textarea>
+    <label class="player-photo-label">
+      Photo (optional)
+      <input type="file" id="playerPhoto" accept="image/*">
+    </label>
+    <button type="submit">Submit Profile</button>
+    <p id="playerFormStatus"></p>
+  </form>
+</section>
+
+<!-- Meet the Team Grid -->
+<section id="meet-the-team" class="player-section">
+  <h2>Meet the Team</h2>
+  <div id="playersGrid" class="players-grid">
+    <!-- Approved player cards load here -->
+  </div>
+</section>
+
+  
   
   <!-- MEDIA -->
   <section id="media" class="media">
