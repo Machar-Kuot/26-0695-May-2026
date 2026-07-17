@@ -189,6 +189,96 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
+   // PLAYER PROFILE SUBMISSION
+const playerForm = document.getElementById('playerForm');
+const playerFormStatus = document.getElementById('playerFormStatus');
+
+playerForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  playerFormStatus.textContent = 'Submitting...';
+
+  const fullName = document.getElementById('playerName').value.trim();
+  const position = document.getElementById('playerPosition').value.trim();
+  const jerseyNumber = document.getElementById('playerNumber').value || null;
+  const bio = document.getElementById('playerBio').value.trim();
+  const photoFile = document.getElementById('playerPhoto').files[0];
+
+  let photoUrl = null;
+
+  try {
+    if (photoFile) {
+      const fileExt = photoFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+
+      const { error: uploadError } = await supabase
+        .storage
+        .from('player-photos')
+        .upload(fileName, photoFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase
+        .storage
+        .from('player-photos')
+        .getPublicUrl(fileName);
+
+      photoUrl = publicUrlData.publicUrl;
+    }
+
+    const { error: insertError } = await supabase
+      .from('players')
+      .insert([{
+        full_name: fullName,
+        position: position,
+        jersey_number: jerseyNumber,
+        bio: bio,
+        photo_url: photoUrl,
+        approved: false
+      }]);
+
+    if (insertError) throw insertError;
+
+    playerFormStatus.textContent = 'Profile submitted! It will appear once approved.';
+    playerForm.reset();
+  } catch (err) {
+    console.error(err);
+    playerFormStatus.textContent = 'Something went wrong. Please try again.';
+  }
+});
+
+// MEET THE TEAM GRID — loads only approved players
+async function loadPlayers() {
+  const grid = document.getElementById('playersGrid');
+  const { data: players, error } = await supabase
+    .from('players')
+    .select('*')
+    .eq('approved', true)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  grid.innerHTML = players.map(p => {
+    const avatar = p.photo_url
+      ? `<img src="${p.photo_url}" alt="${p.full_name}">`
+      : `<img class="player-avatar" src="https://ui-avatars.com/api/?name=${encodeURIComponent(p.full_name)}&background=E8881A&color=fff" alt="${p.full_name}">`;
+
+    return `
+      <div class="player-card">
+        ${avatar}
+        <h3>${p.full_name}</h3>
+        <p class="player-meta">${p.position || ''}${p.jersey_number ? ' · #' + p.jersey_number : ''}</p>
+        ${p.bio ? `<p class="player-bio">${p.bio}</p>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+loadPlayers();
+
+
   /* ------------------------------------------------------------------
      3. DONATION FORM VALIDATION + SUPABASE SUBMISSION
      ------------------------------------------------------------------ */
