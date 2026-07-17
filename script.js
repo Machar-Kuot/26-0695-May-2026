@@ -2,7 +2,8 @@
    KINGS SPORTS | TIGER BASKETBALL CLUB — script.js
    1. Weekend fixtures popup
    2. Registration form validation + Supabase submission
-   3. Donation form validation + Supabase submission
+   3. Player profile submission + Meet the Team grid
+   4. Donation form validation + Supabase submission
    ========================================================================== */
 
 /* ------------------------------------------------------------------
@@ -189,98 +190,106 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-   // PLAYER PROFILE SUBMISSION
-const playerForm = document.getElementById('playerForm');
-const playerFormStatus = document.getElementById('playerFormStatus');
+  /* ------------------------------------------------------------------
+     3. PLAYER PROFILE SUBMISSION + MEET THE TEAM GRID
+     ------------------------------------------------------------------ */
+  var playerForm = document.getElementById('playerForm');
+  var playerFormStatus = document.getElementById('playerFormStatus');
 
-playerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  playerFormStatus.textContent = 'Submitting...';
+  if (playerForm) {
+    playerForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      playerFormStatus.style.color = '';
+      playerFormStatus.textContent = 'Submitting...';
 
-  const fullName = document.getElementById('playerName').value.trim();
-  const position = document.getElementById('playerPosition').value.trim();
-  const jerseyNumber = document.getElementById('playerNumber').value || null;
-  const bio = document.getElementById('playerBio').value.trim();
-  const photoFile = document.getElementById('playerPhoto').files[0];
+      var fullName = document.getElementById('playerName').value.trim();
+      var position = document.getElementById('playerPosition').value.trim();
+      var jerseyNumberRaw = document.getElementById('playerNumber').value.trim();
+      var jerseyNumber = jerseyNumberRaw === '' ? null : Number(jerseyNumberRaw);
+      var bio = document.getElementById('playerBio').value.trim();
+      var photoFile = document.getElementById('playerPhoto').files[0];
 
-  let photoUrl = null;
+      var photoUrl = null;
 
-  try {
-    if (photoFile) {
-      const fileExt = photoFile.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+      try {
+        if (photoFile) {
+          var fileExt = photoFile.name.split('.').pop();
+          var fileName = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + fileExt;
 
-      const { error: uploadError } = await supabase
-        .storage
-        .from('player-photos')
-        .upload(fileName, photoFile);
+          var uploadResult = await supabaseClient
+            .storage
+            .from('player-photos')
+            .upload(fileName, photoFile);
 
-      if (uploadError) throw uploadError;
+          if (uploadResult.error) throw uploadResult.error;
 
-      const { data: publicUrlData } = supabase
-        .storage
-        .from('player-photos')
-        .getPublicUrl(fileName);
+          var publicUrlData = supabaseClient
+            .storage
+            .from('player-photos')
+            .getPublicUrl(fileName);
 
-      photoUrl = publicUrlData.publicUrl;
+          photoUrl = publicUrlData.data.publicUrl;
+        }
+
+        var insertResult = await supabaseClient
+          .from('players')
+          .insert([{
+            full_name: fullName,
+            position: position,
+            jersey_number: jerseyNumber,
+            bio: bio,
+            photo_url: photoUrl,
+            approved: false
+          }]);
+
+        if (insertResult.error) throw insertResult.error;
+
+        playerFormStatus.style.color = '';
+        playerFormStatus.textContent = 'Profile submitted! It will appear once approved.';
+        playerForm.reset();
+      } catch (err) {
+        console.error(err);
+        playerFormStatus.style.color = '#C23B2E';
+        playerFormStatus.textContent = 'Something went wrong: ' + (err.message || 'please try again.');
+      }
+    });
+  }
+
+  var playersGrid = document.getElementById('playersGrid');
+
+  if (playersGrid) {
+    loadPlayers();
+  }
+
+  async function loadPlayers() {
+    var result = await supabaseClient
+      .from('players')
+      .select('*')
+      .eq('approved', true)
+      .order('created_at', { ascending: false });
+
+    if (result.error) {
+      console.error(result.error);
+      return;
     }
 
-    const { error: insertError } = await supabase
-      .from('players')
-      .insert([{
-        full_name: fullName,
-        position: position,
-        jersey_number: jerseyNumber,
-        bio: bio,
-        photo_url: photoUrl,
-        approved: false
-      }]);
+    playersGrid.innerHTML = result.data.map(function (p) {
+      var avatar = p.photo_url
+        ? '<img src="' + p.photo_url + '" alt="' + p.full_name + '">'
+        : '<img class="player-avatar" src="https://ui-avatars.com/api/?name=' + encodeURIComponent(p.full_name) + '&background=E8881A&color=fff" alt="' + p.full_name + '">';
 
-    if (insertError) throw insertError;
-
-    playerFormStatus.textContent = 'Profile submitted! It will appear once approved.';
-    playerForm.reset();
-  } catch (err) {
-    console.error(err);
-    playerFormStatus.textContent = 'Something went wrong. Please try again.';
+      return '<div class="player-card">' +
+        avatar +
+        '<h3>' + p.full_name + '</h3>' +
+        '<p class="player-meta">' + (p.position || '') + (p.jersey_number ? ' · #' + p.jersey_number : '') + '</p>' +
+        (p.bio ? '<p class="player-bio">' + p.bio + '</p>' : '') +
+        '</div>';
+    }).join('');
   }
-});
-
-// MEET THE TEAM GRID — loads only approved players
-async function loadPlayers() {
-  const grid = document.getElementById('playersGrid');
-  const { data: players, error } = await supabase
-    .from('players')
-    .select('*')
-    .eq('approved', true)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  grid.innerHTML = players.map(p => {
-    const avatar = p.photo_url
-      ? `<img src="${p.photo_url}" alt="${p.full_name}">`
-      : `<img class="player-avatar" src="https://ui-avatars.com/api/?name=${encodeURIComponent(p.full_name)}&background=E8881A&color=fff" alt="${p.full_name}">`;
-
-    return `
-      <div class="player-card">
-        ${avatar}
-        <h3>${p.full_name}</h3>
-        <p class="player-meta">${p.position || ''}${p.jersey_number ? ' · #' + p.jersey_number : ''}</p>
-        ${p.bio ? `<p class="player-bio">${p.bio}</p>` : ''}
-      </div>
-    `;
-  }).join('');
-}
-
-loadPlayers();
 
 
   /* ------------------------------------------------------------------
-     3. DONATION FORM VALIDATION + SUPABASE SUBMISSION
+     4. DONATION FORM VALIDATION + SUPABASE SUBMISSION
      ------------------------------------------------------------------ */
   var donationForm = document.getElementById('donationForm');
 
@@ -389,3 +398,4 @@ loadPlayers();
   }
 
 });
+
